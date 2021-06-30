@@ -1,0 +1,328 @@
+//
+// @license
+//
+// Copyright IBM Corp. 2020
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+$feature-flags: (
+  enable-css-custom-properties: true,
+  grid-columns-16: true,
+);
+$icon-size: 16px;
+$icon20-size: 20px;
+$icon24-size: 24px;
+$icon32-size: 32px;
+
+
+//@import 'carbon-components/scss/globals/scss/styles.scss';
+@import 'carbon-components/scss/globals/grid/grid';
+@import 'carbon-components/scss/components/ui-shell/content';
+@import 'carbon-components/scss/components/tag/tag';
+@import 'carbon-components/scss/components/structured-list/structured-list';
+@import 'carbon-components/scss/components/loading/loading';
+@import 'carbon-components/scss/components/inline-loading/inline-loading';
+@import 'carbon-components/scss/components/tile/tile';
+@import 'carbon-components/scss/components/notification/toast-notification';
+@import 'carbon-components/scss/components/modal/modal';
+//@import 'carbon-components/scss/components/accordion/accordion';
+
+// TODO find a way to use correct css for form
+@import 'carbon-components/scss/components/form/form';
+@import 'carbon-components/scss/components/text-input/text-input';
+@import 'carbon-components/scss/components/text-area/text-area';
+@import 'carbon-components/scss/components/select/select';
+@import 'carbon-components/scss/components/number-input/number-input';
+//@import 'carbon-web-components/scss/components/form/form-item';
+@import 'carbon-components/scss/components/button/button';
+
+//@import 'carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/type';
+@import 'carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/font-face/mono';
+@import 'carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/font-face/sans';
+
+//@include carbon--type-reset();
+@include carbon--font-face-mono();
+@include carbon--font-face-sans();
+
+@import '@carbon/type/scss/classes';
+@import '@carbon/type/scss/scale';
+@import '@carbon/type/scss/styles';
+@import '@carbon/colors/scss/colors';
+//@import '@carbon/ibmdotcom-styles/scss/globals/vars';
+//@import '@carbon/ibmdotcom-styles/scss/components/tableofcontents/tableofcontents';
+@import '@carbon/ibmdotcom-styles/scss/themes/expressive/index';
+
+html,
+body {
+  margin: 0;
+}
+
+/* Margin settings for demo content */
+h2 {
+  margin: $spacing-07 0;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
+.outside {
+  box-sizing: border-box;
+}
+.inside {
+  margin-left: 3px;
+}
+
+.bx--form-item {
+  margin-top: 5px;
+  margin-bottom: 5px;
+
+}
+
+.userinfo {
+  float: right;
+  display: flex;
+  align-items: center;
+  padding-right: 5px    
+}
+.icon {
+  width: $icon-size;
+  height: $icon-size;
+}
+.icon-fill-red {
+  width: $icon-size;
+  height: $icon-size;
+  fill: red;
+}
+.icon-fill-yellow {
+  width: $icon-size;
+  height: $icon-size;
+  fill: $yellow-30;
+}
+.icon20-fill-yellow {
+  width: $icon20-size;
+  height: $icon20-size;
+  fill: $yellow-30;
+}
+.icon24-fill-yellow {
+  width: $icon24-size;
+  height: $icon24-size;
+  fill: $yellow-30;
+}
+
+
+svg[fill='green'] path {
+  fill: $support-02;
+  opacity: 1;
+}
+svg[fill='red'] path {
+  fill: $danger-01;
+  opacity: 1;
+}
+
+.app--left-col {
+  background-color: $cyan-10;
+  min-width: 7rem;
+}
+
+
+.app--subtitle {
+  color: $cool-gray-100;
+  font-size: 80%;
+  font-style: italic;
+}
+
+.app--error_msg {
+  color: $red-60;
+  font-size: larger; 
+  font-weight: bold; 
+  font-style: italic;
+  padding-bottom: 1%;
+}
+
+.app--type-mono-scale_1 {
+  font-size: carbon--type-scale(1);
+  font-family: carbon--font-family('mono');
+}
+.app--type-mono-scale_2 {
+  font-size: carbon--type-scale(2);
+  font-family: carbon--font-family('mono');
+}
+.app--type-mono-scale_3 {
+  font-size: carbon--type-scale(3);
+  font-family: carbon--font-family('mono');
+}
+.app--type-mono-scale_5 {
+  font-size: carbon--type-scale(5);
+  font-family: carbon--font-family('mono');
+}
+.app--type-mono-scale_8 {
+  font-size: carbon--type-scale(8);
+  font-family: carbon--font-family('mono');
+}
+.app--type-scale_1 {
+  font-size: carbon--type-scale(1);
+}
+.app--type-scale_2 {
+  font-size: carbon--type-scale(2);
+}
+.app--type-scale_3 {
+  font-size: carbon--type-scale(3);
+}
+.app--type-scale_5 {
+  font-size: carbon--type-scale(5);
+}
+.app--type-scale_8 {
+  font-size: carbon--type-scale(8);
+}
+
+
+.app--label-01 {
+  @include carbon--type-style('label-01');
+}
+
+.app--background-blue10 {
+  background-color: $blue-10;
+}
+.app--background-cyan10 {
+  background-color: $cyan-10;
+}
+.app--background-gray10 {
+  background-color: $gray-10;
+}
+.app--background-warmgray10 {
+  background-color: $warm-gray-10;
+}
+.app--background-green10 {
+  background-color: $green-10
+}
+
+.app--background-blue20 {
+  background-color: $blue-20;
+}
+
+.app--text-red50 {
+  color: $red-50;
+}
+.app--text-blue60 {
+  color: $blue-60;
+}
+.app--text-blue80 {
+  color: $blue-80
+}
+
+.app--text-error {
+  color: $text-error;
+}
+
+.app--text-success {
+  //color: $support-02;
+  color: $green-60;
+}
+
+.app--text-normal {
+  color: $text-01;
+}
+
+.app--danger-btn {
+  background-color: $red-80;
+  font-size: large;
+}
+.app--cancel-btn {
+  background-color: $gray-100;
+  font-size: large;
+}
+
+.app--danger-small {
+  color: $danger-01;
+  font-size: small;
+}
+
+.app--success-small {
+//  color: $support-02;   //note: not enough contrast when used with background
+  color: $green-60;
+  font-size: small;
+}
+
+.app--warning-small {
+  color: $orange-60;
+  font-size: small;
+}
+
+.app--productive-heading-01 {
+  @include carbon--type-style('productive-heading-01', true)
+}
+
+.app--toast_messages {
+  position: absolute;
+  right: 0px;
+  z-index: 1;
+}
+.app--toast_messages_sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+}
+
+// lpar defined grid view
+.app--lpardef-grid-container {
+  display: grid;
+  //grid-template-columns: 25% 25% 25% 25%;
+  //grid-template-columns: auto auto auto auto;
+  //grid-template-columns: auto;
+  grid-gap: 10px;
+  padding: 10px;
+}
+.app--lpardef-grid-item {
+  background-color: $blue-10;
+  padding: 15px 10px;
+  overflow: auto;
+}
+// grid container span 2 cols
+.app--grid-2cols {
+  grid-column: span 2;
+}
+// grid container span 3 cols
+.app--grid-3cols {
+  grid-column: span 3;
+}
+// grid container span 4 cols
+.app--grid-4cols {
+  grid-column: span 4;
+}
+
+
+[data-notification] {
+  margin-left: auto;
+  margin-right: 3px;
+  //z-index: 5;
+}
+
+
+// animations
+// lpar form err msg
+/* The animation code */
+@keyframes lpar_form_errmsg {
+  0%  {visibility: visible}
+  25%  {font-size: x-large; color: $red-30}
+  50%  {font-size: large; color: $red-60}
+  99%  {font-size: large; color: $red-60}
+  100%  {visibility:hidden}
+}
+
+#lpar_form_errmsg {
+  visibility: hidden;
+  animation-name: lpar_form_errmsg;
+  animation-duration: 4s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+
+
+main {
+  margin: calc(#{mini-units(6)} + 1px) auto 0 auto;
+  padding: $spacing-09;
+  max-width: 99rem;
+}

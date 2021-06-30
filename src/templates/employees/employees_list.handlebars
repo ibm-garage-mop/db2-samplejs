@@ -1,0 +1,27 @@
+                <h3 class="app--background-cyan10">Employees table
+                {{#if employees}}
+                  <span class="app--subtitle">({{employees.length}})</span>
+                </h3>
+                {{/if}}
+                {{#unless employees}}
+                  <span class="app--subtitle">(0)</span>    
+                </h3>
+                <br />
+                {{/unless}}
+                {{#if employees}}
+                <section class="bx--structured-list">
+                  <div class="bx--structured-list-thead">
+                    <div class="bx--structured-list-row bx--structured-list-row--header-row">
+                      <div class="bx--structured-list-th">Employee No</div>
+                      <div class="bx--structured-list-th">First name</div>
+                      <div class="bx--structured-list-th">Last name</div>
+                      <div class="bx--structured-list-th">Department</div>
+                      <div class="bx--structured-list-th">ED Level</div>
+                      <div class="bx--structured-list-th">Salary</div>
+                    </div>
+                  </div>
+                  <div class="bx--structured-list-tbody">
+                    {{#employees}}{{> employees_list_item carbon_icons_svg_href=../app_util.carbon_icons_svg_href}}{{/employees}}
+                  </div>
+                </section>
+                {{/if}}

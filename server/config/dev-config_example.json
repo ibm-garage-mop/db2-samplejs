@@ -1,0 +1,12 @@
+{ 
+	"appLogLevel": "trace",
+	"httpLogLevel": "error",
+	"db2_connection": {
+		"database": "DBNAME",
+		"hostname": "x.x.x.x",
+		"uid": "dbuser",
+		"pwd": "dbpwd",
+		"port": "50000",
+		"protocol": "TCPIP"
+	}
+} 

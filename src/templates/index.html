@@ -1,0 +1,74 @@
+<!--
+@license
+Copyright IBM Corp. 2020
+This source code is licensed under the Apache-2.0 license found in the
+LICENSE file in the root directory of this source tree.
+-->
+
+<html lang="en">
+  <head>
+    <title>DB2 DEMO APP v1.0</title>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <!--<dds-masthead-container id="masthead-container"></dds-masthead-container> -->
+    <dds-masthead>
+      <dds-masthead-menu-button></dds-masthead-menu-button>
+      <dds-masthead-logo></dds-masthead-logo>
+      <dds-top-nav menu-bar-label="IBM [Platform]" aria-label="IBM [Platform]">
+        <dds-top-nav-item role="link" href="javascript:void(0);" title="Link1"></dds-top-nav-item>
+        <dds-top-nav-item role="link" href="javascript:void(0);" title="Link2"></dds-top-nav-item>
+      </dds-top-nav>
+      <dds-left-nav-overlay></dds-left-nav-overlay>
+      <dds-left-nav menu-bar-label="IBM [Platform]">
+        <dds-left-nav-item role="link" href="javascript:void(0);" title="Link1"></dds-left-nav-item>
+        <dds-left-nav-item role="link" href="javascript:void(0);" title="Link2"></dds-left-nav-item>
+      </dds-left-nav>
+    </dds-masthead>
+    <main>
+      <div class="bx--grid">
+        <div class="bx--row">
+          <div class="bx--col-sm-0 bx--col-md-0 bx--col-lg-2">
+            <div class="outside">
+              <div class="inside">
+                <div class="bx--tile bx--aspect-ratio bx--aspect-ratio--1x2 app--left-col" title="Version v1.0">
+                  DB2 Demo Application v1.0
+                </div>
+            </div>
+            </div>
+          </div>
+          <div class="bx--col-sm-4 bx--col-md-8 bx--col-lg-14">
+            <div class="outside">
+              <div class="inside">
+                <div id="toast_messages" class="app--toast_messages"></div>
+                <div id="appcontent_main"><h1 style="color:teal">Please wait while the page is loading....</h1></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- global expressive modal 
+      use following js example code to manipulate the modal:
+      let dbmmain_modal_div_elem = document.getElementsByTagName('dds-expressive-modal')[0];
+      dbmmain_modal_div_elem.open = true // open the modal or false to close the modal
+      //dbmmain_modal_div_elem.setAttribute('size', 'full-width')
+      //dbmmain_modal_div_elem.setAttribute('size', '') // default to regular size
+      
+      modal content 
+    -->
+    <dds-expressive-modal>
+      <dds-expressive-modal-header>
+        <dds-expressive-modal-close-button role="button"></dds-expressive-modal-close-button>
+        <dds-expressive-modal-heading></dds-expressive-modal-heading>
+        <p class="app--subtitle"></p>
+      </dds-expressive-modal-header>
+      <dds-expressive-modal-body></dds-expressive-modal-body>
+      <dds-expressive-modal-footer slot="footer"></dds-expressive-modal-footer>
+      <!-- Note: focusable span allows for focus wrap feature within Modals -->
+      <span tabindex="0"></span> 
+    </dds-expressive-modal>
+
+    <div id="app_modal"></div>    
+  </body>
+</html>

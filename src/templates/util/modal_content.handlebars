@@ -1,0 +1,66 @@
+<!--
+  Copyright IBM Corp. 2016, 2018
+
+  This source code is licensed under the Apache-2.0 license found in the
+  LICENSE file in the root directory of this source tree.
+-->
+    <!-- carbon dander modal xs -->
+    <div data-modal id="danger-modal-xs" class="bx--modal bx--modal--danger" role="dialog"
+      aria-modal="true" aria-labelledby="danger-modal-xs-label" aria-describedby="danger-modal-xs-heading" tabindex="-1">
+      <div class="bx--modal-container bx--modal-container--xs">
+        <div class="bx--modal-header">
+          <p class="bx--modal-header__label bx--type-delta" id="danger-modal-xs-label"></p>
+          <p class="bx--modal-header__heading bx--type-beta" id="danger-modal-xs-heading"></p>
+          <button class="bx--modal-close" type="button" data-modal-close aria-label="close modal" >
+            <svg focusable="false" preserveAspectRatio="xMidYMid meet" style="will-change: transform;" xmlns="http://www.w3.org/2000/svg" class="bx--modal-close__icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M12 4.7L11.3 4 8 7.3 4.7 4 4 4.7 7.3 8 4 11.3 4.7 12 8 8.7 11.3 12 12 11.3 8.7 8z"></path></svg>
+          </button>
+        </div>
+        <!-- Note: Modals with content that scrolls, at any viewport, requires `tabindex="0"` on the `bx--modal-content` element -->
+        <div class="bx--modal-content" id="danger-modal-xs-content"></div>
+        <div class="bx--modal-content--overflow-indicator"></div>
+        <div class="bx--modal-footer" id="danger-modal-xs-footer">
+          <!-- button actions are added by the code
+          <button class="bx--btn bx--btn--secondary" type="button" data-modal-close data-modal-primary-focus id="danger-modal-xs-btn-cancel">Cancel</button>
+          <button class="bx--btn bx--btn--danger" type="button" aria-label="Danger" id="danger-modal-xs-btn-ok"></button>
+          -->
+        </div>
+      </div>
+      <!-- Note: focusable span allows for focus wrap feature within Modals -->
+      <span tabindex="0"></span>
+    </div>
+
+    <!-- input modal -->
+    <div data-modal id="input-modal" class="bx--modal " role="dialog"
+      aria-modal="true" aria-labelledby="input-modal-label" aria-describedby="input-modal-heading" tabindex="-1">
+      <div class="bx--modal-container">
+        <div class="bx--modal-header">
+          <p class="bx--modal-header__label bx--type-delta" id="input-modal-label"></p>
+          <p class="bx--modal-header__heading bx--type-beta" id="input-modal-heading"></p>
+          <button class="bx--modal-close" type="button" data-modal-close aria-label="close modal" >
+            <svg focusable="false" preserveAspectRatio="xMidYMid meet" style="will-change: transform;" xmlns="http://www.w3.org/2000/svg" class="bx--modal-close__icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M12 4.7L11.3 4 8 7.3 4.7 4 4 4.7 7.3 8 4 11.3 4.7 12 8 8.7 11.3 12 12 11.3 8.7 8z"></path></svg>
+          </button>
+        </div>
+
+        <!-- Note: Modals with content that scrolls, at any viewport, requires `tabindex="0"` on the `bx--modal-content` element -->
+
+        <div class="bx--modal-content bx--modal-content--with-form" id="input-modal-content">
+          <!--
+          <div class="bx--form-item">
+            <label for="text-input-pyu0ribosn" class="bx--label">Text Input label</label>
+            <input id="text-input-pyu0ribosn" type="text" class="bx--text-input" placeholder="Optional placeholder text"
+              data-modal-primary-focus>
+          </div>
+        -->
+        </div>
+        <div class="bx--modal-content--overflow-indicator"></div>
+
+        <div class="bx--modal-footer" id="input-modal-footer">
+          <!--
+          <button class="bx--btn bx--btn--secondary" type="button" data-modal-close>Secondary button</button>
+          <button class="bx--btn bx--btn--primary" type="button"  >Primary button</button>
+          -->
+        </div>
+      </div>
+      <!-- Note: focusable span allows for focus wrap feature within Modals -->
+      <span tabindex="0"></span>
+    </div>

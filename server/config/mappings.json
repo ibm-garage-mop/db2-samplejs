@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "appLogLevel": {
+    "searchPatterns": [
+      "env:appLogLevel",
+      "file:/server/config/dev-config.json:$.appLogLevel"
+    ]
+  },
+  "httpLogLevel": {
+    "searchPatterns": [
+      "env:httpLogLevel",
+      "file:/server/config/dev-config.json:$.httpLogLevel"
+    ]
+  },
+  "db2_connection": {
+    "searchPatterns": [
+      "env:db2_connection",
+      "file:/server/config/dev-config.json:$.db2_connection"
+    ]
+  }
+}
