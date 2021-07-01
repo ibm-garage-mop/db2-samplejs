@@ -1,6 +1,7 @@
 # Use the official image as a parent image.
 #FROM node:current-slim
-FROM node:14
+#FROM node:14
+FROM node:14-alpine3.13
 
 # Set the working directory.
 WORKDIR /usr/src/app
