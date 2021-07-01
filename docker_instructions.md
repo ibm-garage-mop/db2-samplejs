@@ -1,4 +1,8 @@
-## Some docker command used to build the images and container
+[![Docker node image Version](https://img.shields.io/badge/node-14--buster-green)](https://hub.docker.com/layers/node/library/node/14-buster/images/sha256-11b0c57fed56dce48478833c271fa8076d28ed221deb1fd221fcc2b66c392c75?context=explore)
+
+
+
+##  docker command used to build the images and container on your local system
 
 Build the image:
 ```
@@ -21,7 +25,7 @@ create the repository on dockerhub web page (`db2-samplejs`) as private reposito
 ```
 docker login
 docker tag db2-samplejs:1.0 <dockerHub userId>/db2-samplejs:1.0
-docker push benoitclerget/db2-samplejs:1.0
+docker push <dockerHub userId>/db2-samplejs:1.0
 ```
 
 Get the mage from docker hub:
@@ -29,8 +33,8 @@ Get the mage from docker hub:
 Add the docker user to authorisation list for this private docker repository:
 ```
 docker login
-docker pull benoitclerget/db2-samplejs:1.0
-docker run --publish 80:3000 --detach --name db2-samplejs benoitclerget/db2-samplejs:1.0
+docker pull <dockerHub userId>/db2-samplejs:1.0
+docker run --publish 443:3000 --detach --name db2-samplejs <dockerHub userId>/db2-samplejs:1.0
 ```
 
 Save the image into a local gzip file: `docker save db2-samplejs:1.0 | gzip > db2-samplejs.tar.gz`
@@ -38,7 +42,7 @@ Save the image into a local gzip file: `docker save db2-samplejs:1.0 | gzip > db
 You can send the gzip file to a user. This user will have to install the image:
 ```
 docker load < db2-samplejs.tar.gz
-docker run --publish 80:3000 --detach --name db2-samplejs db2-samplejs:1.0
+docker run --publish 443:3000 --detach --name db2-samplejs db2-samplejs:1.0
 ```
 
 Once the docker container has been launched, you can view the application form your browser: `https://localhost`

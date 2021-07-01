@@ -104,7 +104,7 @@ export function showEmployees() {
   document.getElementById('appemployees_hrule').weight = "thick";
 
   let appemployees_div_head_elem = document.getElementById('appemployees_div_head');
-  appemployees_div_head_elem.innerHTML = `<h2>Employees list</h2>`
+  appemployees_div_head_elem.innerHTML = `<h2>db2-samplejs application</h2>`
   let appemployees_div_infos1_elem = document.getElementById('appemployees_div_infos1');
   let appemployees_div_infos2_elem = document.getElementById('appemployees_div_infos2');
   appemployees_div_infos1_elem.innerHTML = `<div id="employees_infos1_inlineloading" data-inline-loading class="bx--inline-loading" role="alert" aria-live="assertive">
@@ -123,7 +123,6 @@ export function showEmployees() {
     <p data-inline-loading-text-error hidden class="bx--inline-loading__text">Employees details loading failed!!</p>
   </div>
   `
-  document.getElementById("appemployees_div").style.display = 'block'
   appemployees_div_head_elem.style.display = 'block'
   appemployees_div_infos1_elem.style.display = 'block'
   appemployees_div_infos2_elem.style.display = 'block'
@@ -135,8 +134,8 @@ export function showEmployees() {
     if (!response.err) {
       inLineloadingInstanceEmployees.setState(InlineLoading.states.FINISHED)
       inLineloadingInstanceEmployees.release()
-      appemployees_div_infos1_elem.innerHTML = `to be completed`
-      appemployees_div_infos2_elem.innerHTML = `to be completed`
+      appemployees_div_infos1_elem.innerHTML = `Some explanation here`
+      appemployees_div_infos2_elem.innerHTML = `Soem details here`
       let appemployees_div_list_elem = document.getElementById('appemployees_div_list');
       let employeesListTemplate = require("./templates/employees/employees_list.handlebars")
       appemployees_div_list_elem.innerHTML = employeesListTemplate({

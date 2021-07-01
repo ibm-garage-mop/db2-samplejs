@@ -14,11 +14,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.ibm.com:IBM-Systems-Center-Montpellier/dbm-javascript.git"
+    "url": "git@github.com:ibm-garage-mop/db2-samplejs.git"
   },
   "keywords": [
     "DB2",
     "IBM",
+    "RedHat",
+    "OpenShift",
     "Garage",
     "Montpellier"
   ],
