@@ -37,8 +37,8 @@ import '@carbon/ibmdotcom-web-components/es/components/button/button.js';
 //import '@carbon/ibmdotcom-web-components/es/components/table-of-contents/table-of-contents.js';
 
 ////// carbon icons //////
-import 'svgxuse/svgxuse' // used by svg use icon see https://github.com/carbon-design-system/carbon-icons/blob/master/docs/usage.md
-import carbon_icons_svg_href from 'carbon-icons/dist/carbon-icons.svg';
+//import 'svgxuse/svgxuse' // used by svg use icon see https://github.com/carbon-design-system/carbon-icons/blob/master/docs/usage.md
+//import carbon_icons_svg_href from 'carbon-icons/dist/carbon-icons.svg';
 ////// @carbon/icons //////
 //import { getAttributes, toString } from '@carbon/icon-helpers';
 //import subtractAltIcon16 from '@carbon/icons/es/subtract--alt/16';
@@ -64,8 +64,6 @@ import {getEmployees, inserEmployee, updateEmployeeLevel, addToasterNotification
 const appcontentmain_elem = document.getElementById('appcontent_main');
 // modal instance
 const modal_instance = {}
-// lpar form global network list
-const network_list = []
 
 // The minimum prerequisite to use our service for translation data, etc. (ibm header)
 window.digitalData = {
@@ -100,11 +98,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 export function showEmployees() {
   // set app main content
   let appcontentmainTemplate = require("./templates/employees/employees_main.handlebars");
-  appcontentmain_elem.innerHTML = appcontentmainTemplate({
-    app_util: {
-      carbon_icons_svg_href: carbon_icons_svg_href, // used in hdbs for icons
-    },
-  })
+  appcontentmain_elem.innerHTML = appcontentmainTemplate()
   // final horizontal rule
   document.getElementById('appemployees_hrule').contrast = "low-contrast";
   document.getElementById('appemployees_hrule').weight = "thick";
@@ -147,10 +141,7 @@ export function showEmployees() {
       let employeesListTemplate = require("./templates/employees/employees_list.handlebars")
       appemployees_div_list_elem.innerHTML = employeesListTemplate({
         employees: response.employees,
-        app_util: {
-          carbon_icons_svg_href: carbon_icons_svg_href, // used in hdbs for icons
-        },
-     })
+      })
      appemployees_div_list_elem.style.display = 'block'
     } else {
       console.error('getEmployees error: ' + response.message);
