@@ -54,7 +54,10 @@ COMM                            SYSIBM    DECIMAL                      9     2 Y
       return { err: 'DB_ERROR', message: 'Cannot connect to the Database!!!' }         
     }
     try {
-      let sql_query = `select * from DB2INST1.EMPLOYEE order by empno`
+      let sql_query = `select e.*,d.deptname
+        from DB2INST1.EMPLOYEE e, DB2INST1.DEPARTMENT d
+          where d.deptno=e.workdept
+          order by e.empno`
       let data = await db2conn.query(sql_query)
       db2conn.closeSync();
       log.trace(`[db2.service.getEmployees] db2 connection closed`)
@@ -85,13 +88,21 @@ COMM                            SYSIBM    DECIMAL                      9     2 Y
       empno: '1376',
       firstnme: 'Benoit',
       lastname: 'Clerget',
-      edlevel: 3
+      department: 'A00',
+      edlevel: 3,
+      salary: 42000
     }
     */
     // Check input params
     if(isNaN(parseInt(employee_def.edlevel))) {
       // if edlevel not a number, throw err
       let err = new Error('Input argument edlevel must be a valid integer number !!!')
+      err.name = `insertEmployee.invalidInputData`
+      throw err
+    }
+    if(isNaN(parseInt(employee_def.salary))) {
+      // if salary not a number, throw err
+      let err = new Error('Input argument salary must be a valid integer number !!!')
       err.name = `insertEmployee.invalidInputData`
       throw err
     }
@@ -118,10 +129,11 @@ COMM                            SYSIBM    DECIMAL                      9     2 Y
         return { err: 'EXIST_OR_NOTAUTH', message: `employee ${employee_def.empno} already exists` }
       }
       sql_flow_step = 'insert employee'
-      sql_query = `insert into DB2INST1.EMPLOYEE (empno,firstnme,lastname,edlevel)
-          values('${employee_def.empno}','${employee_def.firstnme}','${employee_def.lastname}',${parseInt(employee_def.edlevel)})
+      sql_query = `insert into DB2INST1.EMPLOYEE (empno,firstnme,lastname,workdept,edlevel,salary)
+          select '${employee_def.empno}','${employee_def.firstnme}','${employee_def.lastname}','${employee_def.department}',${parseInt(employee_def.edlevel)},${parseInt(employee_def.salary)}
+          from ( values (1) )
           where not exists (select * from DB2INST1.EMPLOYEE where empno = '${employee_def.empno}')`
-      data = await db2conn.query(sql_query)
+          data = await db2conn.query(sql_query)
       db2conn.closeSync();
       log.trace(`[db2.service.insertEmployee] db2 connection closed`)
       return { err: null, message: `empoyee ${employee_def.empno} (${employee_def.firstnme} ${employee_def.lastname}) successfully added in database`}
@@ -132,9 +144,15 @@ COMM                            SYSIBM    DECIMAL                      9     2 Y
     }
   }
   
-
   // this method is used to update the dlevel of an existing employee
   async updateEmployeeLevel(employee_level) {
+    //console.log(employee_level)
+    /*
+    {
+      empno: '1376',
+      new_level: 5
+    }
+    */
     // Check input params
     if(isNaN(parseInt(employee_level.new_level))) {
       // if new_level not a number, throw err
@@ -162,11 +180,11 @@ COMM                            SYSIBM    DECIMAL                      9     2 Y
       if(data.length < 1) {
         db2conn.closeSync();
         console.error(`[db2.service.updateEmployeeLevel] employee ${employee_level.empno} does not exist`)
-        return { err: 'NOT_EXIST_OR_NOTAUTH', message: `employee ${employee_level.empno} does not exist` }
+        return { err: 'NOTEXIST_OR_NOTAUTH', message: `employee ${employee_level.empno} does not exist` }
       }
       sql_flow_step = 'update employee with new edlevel'
       sql_query = `update DB2INST1.EMPLOYEE set edlevel=${parseInt(employee_level.new_level)}
-        where empno='${empno}'`
+        where empno='${employee_level.empno}'`
       data = await db2conn.query(sql_query)
       db2conn.closeSync();
       log.trace(`[db2.service.updateEmployeeLevel] db2 connection closed`)
@@ -175,6 +193,43 @@ COMM                            SYSIBM    DECIMAL                      9     2 Y
       db2conn.closeSync();
       console.error('[db2.service.updateEmployeeLevel] ' + sql_flow_step, JSON.stringify(err))
       return { err: 'DB_ERROR', message: 'Error updating empolyee edlevel. Step: ' + sql_flow_step } 
+    }
+  }
+
+  // this method is used to delete an employee record
+  async deleteEmployee(empno) {
+    // open db2 connection
+    let db2conn
+    try {
+      log.trace(`[db2.service.deleteEmployee] try to connect to db2...`)
+      db2conn = await ibmdb.open(db2ConnStr)
+    } catch(err) {
+      console.error('[db2.service.deleteEmployee] ', JSON.stringify(err))
+      return { err: 'DB_ERROR', message: 'Cannot connect to the Database!!!' }         
+    }
+    let sql_flow_step = ''
+    try {
+      sql_flow_step = 'sql verif'
+      // check that empno exists
+      // the ibm_db currently does not raise an sql error if empno does not exists  TODO to be confirmed
+      // so we need to add a first query to check if it does exist, then we can run the update 
+      let sql_query = `select empno from DB2INST1.EMPLOYEE where empno='${empno}'`
+      let data = await db2conn.query(sql_query)
+      if(data.length < 1) {
+        db2conn.closeSync();
+        console.error(`[db2.service.deleteEmployee] employee ${empno} does not exist`)
+        return { err: 'NOTEXIST_OR_NOTAUTH', message: `employee ${empno} does not exist` }
+      }
+      sql_flow_step = 'delete employee'
+      sql_query = `delete from DB2INST1.EMPLOYEE where empno='${empno}'`
+      data = await db2conn.query(sql_query)
+      db2conn.closeSync();
+      log.trace(`[db2.service.deleteEmployee] db2 connection closed`)
+      return { err: null, message: `employee ${empno} successfully deleted from Employee table`}
+    } catch(err) {
+      db2conn.closeSync();
+      console.error('[db2.service.deleteEmployee] ' + sql_flow_step, JSON.stringify(err))
+      return { err: 'DB_ERROR', message: 'Error deleting employee Step: ' + sql_flow_step } 
     }
   }
 

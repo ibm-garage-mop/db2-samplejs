@@ -58,6 +58,22 @@ class DataCtl {
       return { err: (e.name?e.name:`unknown`), message: (e.message?e.message:`unknown`) }
     }
   }
-}
 
+  /**
+    * deleteEmployee
+    * 
+  */
+   async deleteEmployee(empno) {
+    log.trace(`[db2Ctl.deleteEmployee] started...`)
+    try {
+      const result = await this.service.deleteEmployee(empno)
+      log.trace(`[deleteEmployee] completed`)
+      return result
+    } catch (e) {
+      log.error(`Error : ${e.name} ${e.message}`)
+      return { err: (e.name?e.name:`unknown`), message: (e.message?e.message:`unknown`) }
+    }
+  }
+
+}
 module.exports = DataCtl

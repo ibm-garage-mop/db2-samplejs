@@ -22,7 +22,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: '[name].bundle.js',
-    library: ['DbmLib', '[name]'], 
+    library: ['AppLib', '[name]'], 
   },
   optimization: {
     runtimeChunk: 'single',

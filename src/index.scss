@@ -52,7 +52,7 @@ $icon32-size: 32px;
 @import '@carbon/colors/scss/colors';
 //@import '@carbon/ibmdotcom-styles/scss/globals/vars';
 //@import '@carbon/ibmdotcom-styles/scss/components/tableofcontents/tableofcontents';
-@import '@carbon/ibmdotcom-styles/scss/themes/expressive/index';
+//@import '@carbon/ibmdotcom-styles/scss/themes/expressive/index';
 
 html,
 body {
@@ -267,45 +267,16 @@ svg[fill='red'] path {
   top: 0px;
 }
 
-// lpar defined grid view
-.app--lpardef-grid-container {
-  display: grid;
-  //grid-template-columns: 25% 25% 25% 25%;
-  //grid-template-columns: auto auto auto auto;
-  //grid-template-columns: auto;
-  grid-gap: 10px;
-  padding: 10px;
-}
-.app--lpardef-grid-item {
-  background-color: $blue-10;
-  padding: 15px 10px;
-  overflow: auto;
-}
-// grid container span 2 cols
-.app--grid-2cols {
-  grid-column: span 2;
-}
-// grid container span 3 cols
-.app--grid-3cols {
-  grid-column: span 3;
-}
-// grid container span 4 cols
-.app--grid-4cols {
-  grid-column: span 4;
-}
-
-
 [data-notification] {
   margin-left: auto;
   margin-right: 3px;
   //z-index: 5;
 }
 
-
 // animations
-// lpar form err msg
+// form err msg
 /* The animation code */
-@keyframes lpar_form_errmsg {
+@keyframes form_errmsg {
   0%  {visibility: visible}
   25%  {font-size: x-large; color: $red-30}
   50%  {font-size: large; color: $red-60}
@@ -313,9 +284,9 @@ svg[fill='red'] path {
   100%  {visibility:hidden}
 }
 
-#lpar_form_errmsg {
+#form_errmsg {
   visibility: hidden;
-  animation-name: lpar_form_errmsg;
+  animation-name: form_errmsg;
   animation-duration: 4s;
   animation-timing-function: ease-in;
   animation-fill-mode: forwards;

@@ -6,15 +6,7 @@
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
-////// ibmdotcom carbon components
-//import '@carbon/ibmdotcom-web-components/es/components/image/image.js';
-//import '@carbon/ibmdotcom-web-components/es/components/horizontal-rule/horizontal-rule.js';
 
-////// carbon components
-//import { Loading } from 'carbon-components';
-//import { InlineLoading } from 'carbon-components';
-
-//import _ from 'lodash'; // javascript utilities https://lodash.com/
 
 //const util = require('util')
 // toaster
@@ -22,7 +14,30 @@ import { Notification } from 'carbon-components';
 //const toastInstanceInfo =  Notification.create(document.getElementById('toast_info'));
 //toastInstanceInfo.remove()
 //toastInstanceInfo.release()
-   
+
+// request web app info api
+async function getWebAppInfos() {
+  if (window.fetch) {
+    try{
+      let response = await fetch('/health')
+      if(response.ok) {
+          let myJson = await response.json()
+          return {err: false, web_infos: myJson}
+      } else {
+        console.error('response error: ' + response.ok);
+        return {err: true, message: 'Error retreiving web app infos response'}
+      }
+  
+    } catch(error) {
+      console.error('Error with fetch operation: ' + error);
+      return {err: true, message: 'Error retreiving web app infos response'}
+    }
+  } else {
+    console.error('fetch not supported');
+    return {err: true, message: 'fetch not supported'}
+  }
+}
+
 // request employees api
 async function getEmployees(resolve,reject) {
   if (window.fetch) {
@@ -54,6 +69,16 @@ async function getEmployees(resolve,reject) {
 // insert new employee
 async function insertEmployee(employee_def,resolve,reject) {
   //console.log(JSON.stringify(employee_def))
+    /*
+    {
+      empno: '1376',
+      firstnme: 'Benoit',
+      lastname: 'Clerget',
+      department: 'A00',
+      edlevel: 3,
+      salary: 42000
+    }
+    */
   if (window.fetch) {
     let myHeaders = new Headers()
     myHeaders.append("Content-Type", "application/json")
@@ -88,7 +113,13 @@ async function insertEmployee(employee_def,resolve,reject) {
 
 // update employee level
 async function updateEmployeeLevel(emp_level,resolve,reject) {
-  if (window.fetch) {
+    /*
+    {
+      empno: '1376',
+      new_level: 5
+    }
+    */
+    if (window.fetch) {
     let myHeaders = new Headers()
     myHeaders.append("Content-Type", "application/json")
     fetch(`/api/employee_level`,{
@@ -98,7 +129,7 @@ async function updateEmployeeLevel(emp_level,resolve,reject) {
     }).then(function(response) {
       if(response.ok) {
         response.json().then(function(myJson) {
-          if (myJson.err && myJson.err != 'NOT_EXIST_OR_NOTAUTH') {
+          if (myJson.err && myJson.err != 'NOTEXIST_OR_NOTAUTH') {
             console.error('API error: ' + myJson.message);
             reject({err: true, message: myJson.message})
           } else {
@@ -120,6 +151,38 @@ async function updateEmployeeLevel(emp_level,resolve,reject) {
   }
 }
 
+// delete employee record
+async function deleteEmployee(empno,resolve,reject) {
+  if (window.fetch) {
+    let myHeaders = new Headers()
+    myHeaders.append("Content-Type", "application/json")
+    fetch(`/api/employee/${empno}`,{
+      method: 'DELETE',
+      headers: myHeaders,
+    }).then(function(response) {
+      if(response.ok) {
+        response.json().then(function(myJson) {
+          if(myJson.err && myJson.err != 'NOTEXIST_OR_NOTAUTH') {
+            console.error('API error: ' + myJson.message);
+            reject({err: true, message: myJson.message})
+          } else {
+            resolve(myJson)
+          }
+        });
+      } else {
+        console.error('response error: ' + response.ok);
+        reject({err: true, message: `Error deleting employee ${empno}`})
+      }
+    })
+    .catch(function(error) {
+      console.error('Error with post operation: ' + error);
+      reject({err: true, message: 'unknownerror'})
+    });
+  } else {
+    console.error('fetch not supported');
+    reject({err: true, message: 'fetch not supported'})
+  }
+}
 
 
 function addToasterNotification(notif_type, notif_obj, duration=8) {
@@ -156,4 +219,4 @@ function addToasterNotification(notif_type, notif_obj, duration=8) {
   })
 }
 
-export {getEmployees, insertEmployee, updateEmployeeLevel, addToasterNotification}
+export {getWebAppInfos, getEmployees, insertEmployee, updateEmployeeLevel, deleteEmployee, addToasterNotification}

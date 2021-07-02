@@ -21,12 +21,14 @@ import '@carbon/ibmdotcom-web-components/es/components/masthead/masthead-contain
 import '@carbon/ibmdotcom-web-components/es/components/horizontal-rule/horizontal-rule.js';
 import '@carbon/ibmdotcom-web-components/es/components/link-with-icon/link-with-icon.js';
 // expressive modal http://ibmdotcom-web-components.mybluemix.net/?path=/docs/components-expressive-modal--default
+/*
 import '@carbon/ibmdotcom-web-components/es/components/expressive-modal/expressive-modal.js';
 import '@carbon/ibmdotcom-web-components/es/components/expressive-modal/expressive-modal-header.js';
 import '@carbon/ibmdotcom-web-components/es/components/expressive-modal/expressive-modal-heading.js';
 import '@carbon/ibmdotcom-web-components/es/components/expressive-modal/expressive-modal-close-button.js';
 import '@carbon/ibmdotcom-web-components/es/components/expressive-modal/expressive-modal-body.js';
 import '@carbon/ibmdotcom-web-components/es/components/expressive-modal/expressive-modal-footer.js';
+*/
 // button group http://ibmdotcom-web-components.mybluemix.net/?path=/docs/components-button-group--default
 import '@carbon/ibmdotcom-web-components/es/components/button-group/button-group.js';
 import '@carbon/ibmdotcom-web-components/es/components/button-group/button-group-item.js';
@@ -58,13 +60,21 @@ import './index.scss';
 // comment and uncommented for normal or test usage (test using sample data without DB access)
 
 // app functions
-import {getEmployees, inserEmployee, updateEmployeeLevel, addToasterNotification} from './app_funcs'
+import {
+  getWebAppInfos,
+  getEmployees,
+  inserEmployee,
+  updateEmployeeLevel,
+  deleteEmployee,
+  addToasterNotification
+} from './app_funcs'
 // app constants for html dom manipulation
 // main div
 const appcontentmain_elem = document.getElementById('appcontent_main');
 // modal instance
 const modal_instance = {}
-
+// global app backend infos
+const app_infos_obj = {}
 // The minimum prerequisite to use our service for translation data, etc. (ibm header)
 window.digitalData = {
   page: {
@@ -78,7 +88,7 @@ window.digitalData = {
   },
 };
 
-// first page loading: show list of projects and userinfo
+// first page loading: show list of employess
 document.addEventListener("DOMContentLoaded", async function() {
   // set app modal content with util modal template
   // this avoid to see modal close elements during the initial document load
@@ -89,9 +99,17 @@ document.addEventListener("DOMContentLoaded", async function() {
   // create input modal instance
   modal_instance.input = Modal.create(document.getElementById('input-modal'));
 
+  // retrieve web app backend infos
+  let resp_json = await getWebAppInfos()
+  if(!resp_json.err) {
+    app_infos_obj.web_server_infos = resp_json.web_infos
+  } else {
+    app_infos_obj.web_server_infos = { name: 'db2-samplejs', version: '?'}
+  }
+  document.getElementById('app_title').innerHTML = `${app_infos_obj.web_server_infos.name} ${app_infos_obj.web_server_infos.version}`
+
   // display list of employees (default page) 
   showEmployees()
-
 })
 
 // display employees page 
@@ -104,10 +122,13 @@ export function showEmployees() {
   document.getElementById('appemployees_hrule').weight = "thick";
 
   let appemployees_div_head_elem = document.getElementById('appemployees_div_head');
-  appemployees_div_head_elem.innerHTML = `<h2>db2-samplejs application</h2>`
   let appemployees_div_infos1_elem = document.getElementById('appemployees_div_infos1');
   let appemployees_div_infos2_elem = document.getElementById('appemployees_div_infos2');
-  appemployees_div_infos1_elem.innerHTML = `<div id="employees_infos1_inlineloading" data-inline-loading class="bx--inline-loading" role="alert" aria-live="assertive">
+  let appemployees_div_list_elem = document.getElementById('appemployees_div_list');
+  appemployees_div_head_elem.innerHTML = `<h2>${app_infos_obj.web_server_infos.name} application</h2>`
+  appemployees_div_infos1_elem.innerHTML = `Some platform infos here`
+  appemployees_div_infos2_elem.innerHTML = `Some web app infos here`
+  appemployees_div_list_elem.innerHTML = `<div id="employees_infos1_inlineloading" data-inline-loading class="bx--inline-loading" role="alert" aria-live="assertive">
     <div class="bx--inline-loading__animation">
       <div data-inline-loading-spinner class="bx--loading bx--loading--small">
         <svg class="bx--loading__svg" viewBox="-75 -75 150 150">
@@ -126,31 +147,45 @@ export function showEmployees() {
   appemployees_div_head_elem.style.display = 'block'
   appemployees_div_infos1_elem.style.display = 'block'
   appemployees_div_infos2_elem.style.display = 'block'
+  appemployees_div_list_elem.classList.remove('app--error_msg')
+  appemployees_div_list_elem.style.display = 'block'
   let inlineloading_employeeselem = document.getElementById('employees_infos1_inlineloading')
   let inLineloadingInstanceEmployees = InlineLoading.create(inlineloading_employeeselem)
   inLineloadingInstanceEmployees.setState(InlineLoading.states.ACTIVE)
+  // prepare refresh top and bottom button action
+  let appemployees_refresh_top_btn_elem = document.getElementById('appemployees_refresh_top_btn')
+  appemployees_refresh_top_btn_elem.addEventListener('click', () => {
+    showEmployees()
+  })
+  let appemployees_refresh_btn_elem = document.getElementById('appemployees_refresh_btn')
+  appemployees_refresh_btn_elem.addEventListener('click', () => {
+    showEmployees()
+  })
+
   // Retrieve employees from DB
   getEmployees(function(response){
     if (!response.err) {
       inLineloadingInstanceEmployees.setState(InlineLoading.states.FINISHED)
       inLineloadingInstanceEmployees.release()
-      appemployees_div_infos1_elem.innerHTML = `Some explanation here`
-      appemployees_div_infos2_elem.innerHTML = `Soem details here`
-      let appemployees_div_list_elem = document.getElementById('appemployees_div_list');
       let employeesListTemplate = require("./templates/employees/employees_list.handlebars")
       appemployees_div_list_elem.innerHTML = employeesListTemplate({
         employees: response.employees,
       })
-     appemployees_div_list_elem.style.display = 'block'
     } else {
       console.error('getEmployees error: ' + response.message);
       inLineloadingInstanceEmployees.setState(InlineLoading.states.ERROR)
-      appemployees_div_infos1_elem.innerHTML = 'ERROR No employees retrieved from DB...'
+      appemployees_div_list_elem.innerHTML = 'ERROR No employees retrieved from DB...'
+      appemployees_div_list_elem.classList.add('app--error_msg')
     }
+    // enable refresh top and bottom button
+    //appemployees_refresh_top_btn_elem.disabled = false
+    appemployees_refresh_btn_elem.disabled = false
   },function(error){
     console.error('getEmployees reject error: ' + error.message);
     inLineloadingInstanceEmployees.setState(InlineLoading.states.ERROR)
-    appemployees_div_infos1_elem.innerHTML = 'ERROR No employees retrieved from DB...'
+    appemployees_div_list_elem.innerHTML = 'ERROR No employees retrieved from DB...'
+    // enable refresh top and bottom button
+    //appemployees_refresh_top_btn_elem.disabled = false
+    appemployees_refresh_btn_elem.disabled = false
   })
 }
-

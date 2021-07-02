@@ -52,6 +52,21 @@ module.exports = function(app) {
     }
   })
 
+  // delete employee entry
+  router.delete('/api/employee/:empno', async function(req, res) {
+    //console.log(req.body); // employee_level json
+    const dataCtl = new DataController()
+    let result = await dataCtl.deleteEmployee(req.params.empno)
+    if(result.err && result.err != 'NOTEXIST_OR_NOTAUTH') {
+      res.status(httpStatus.BAD_REQUEST).json(result).end()
+    } else {
+      res
+      .status(httpStatus.OK)
+      .json(result)
+      .end()
+    }
+  })
+
   app.use('/', express.static("./dist"))
   app.use(router)
 }
