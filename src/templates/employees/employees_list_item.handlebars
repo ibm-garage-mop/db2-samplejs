@@ -1,8 +1,34 @@
                     <div class="bx--structured-list-row">
-                        <div class="bx--structured-list-td app--type-mono-scale_5">{{EMPNO}}</div>
+                        <div class="bx--structured-list-td">
+                            <div style="display: flex">
+                                <dds-link-with-icon role="link" icon-placement="left" href="javascript:void(0);" onclick="javascript:AppLib.index.delete_employee('{{EMPNO}}','{{FIRSTNME}}','{{LASTNAME}}');">
+                                    <!--span title="Delete employee {{FIRSTNME}} {{LASTNAME}} ({{EMPNO}})" class="app--danger-small">Delete</span-->
+                                    <svg slot="icon" focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="red" aria-hidden="true" width="20" height="20" viewBox="0 0 32 32">
+                                        <title>Delete employee {{FIRSTNME}} {{LASTNAME}} ({{EMPNO}})</title>
+                                        <path d="M16,4c6.6,0,12,5.4,12,12s-5.4,12-12,12S4,22.6,4,16S9.4,4,16,4 M16,2C8.3,2,2,8.3,2,16s6.3,14,14,14s14-6.3,14-14	S23.7,2,16,2z"></path>
+                                        <path d="M8 15H24V17H8z"></path>
+                                    </svg>
+                                </dds-link-with-icon>
+                                <span class="app--type-mono-scale_5">{{EMPNO}}</span>
+                            </div>
+                        </div>
                         <div class="bx--structured-list-td app--type-scale_5">{{FIRSTNME}}</div>
                         <div class="bx--structured-list-td app--type-scale_5">{{LASTNAME}}</div>
-                        <div class="bx--structured-list-td app--type-scale_3">{{DEPTNAME}} <span class="app--type-mono-scale_2 app--text-red50">({{WORKDEPT}})</span></div>
-                        <div class="bx--structured-list-td app--type-scale_5 app--background-green10">{{EDLEVEL}}</div>
+                        <div class="bx--structured-list-td app--type-scale_3">{{DEPTNAME}} <span class="app--type-mono-scale_2 app--text-blue60">({{WORKDEPT}})</span></div>
+                        <div class="bx--structured-list-td app--type-scale_5 app--background-green10">
+                            <div style="display: flex">
+                                <dds-link-with-icon role="link" icon-placement="left" href="javascript:void(0);" onclick="javascript:AppLib.index.update_level('{{EMPNO}}','{{FIRSTNME}}','{{LASTNAME}}','{{EDLEVEL}}');">
+                                  <!--span title="Update level for employee {{FIRSTNME}} {{LASTNAME}} ({{EMPNO}})" class="app--warning-small">Update</span-->
+                                  <svg slot="icon" focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="#ff832b" aria-hidden="true" width="20" height="20" viewBox="0 0 32 32">
+                                    <title>Update level for employee {{FIRSTNME}} {{LASTNAME}} ({{EMPNO}})</title>
+                                    <rect style="fill: #ff832b" x="2" y="28" width="20" height="2"/>
+                                    <path fill="#ff832b" d="M25.4,9c0.8-0.8,0.8-2,0-2.8c0,0,0,0,0,0l-3.6-3.6c-0.8-0.8-2-0.8-2.8,0c0,0,0,0,0,0l-15,15V24h6.4L25.4,9z M20.4,4L24,7.6
+                                        l-3,3L17.4,7L20.4,4z M6,22v-3.6l10-10l3.6,3.6l-10,10H6z"/>
+                                    <rect id="_Transparent_Rectangle_" style="fill: none" width="20" height="20"/>
+                                  </svg>
+                                </dds-link-with-icon>
+                                {{EDLEVEL}}
+                            </div>
+                        </div>
                         <div class="bx--structured-list-td app--type-scale_5 app--text-blue80" style="text-align:right">{{SALARY}}</div>
                     </div>

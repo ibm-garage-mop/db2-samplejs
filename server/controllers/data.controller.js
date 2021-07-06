@@ -9,6 +9,21 @@ class DataCtl {
   }
 
   ///////////// DB
+    /**
+     * getDB2Infos
+     * 
+    */
+     async getDB2Infos() {
+      log.trace(`[db2Ctl.getDB2Infos] started...`)
+      try {
+        const result = await this.service.getDB2Infos()
+        log.trace(`[db2Ctl.getDB2Infos] completed`)
+        return { err: null, db_infos: result.response }
+      } catch (e) {
+        log.error(`Error : ${e.name} ${e.message}`)
+        return { err: (e.name?e.name:`unknown`), message: (e.message?e.message:`unknown`) }
+      }
+    }
   
     /**
      * getEmployees

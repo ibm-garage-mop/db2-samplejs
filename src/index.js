@@ -61,9 +61,10 @@ import './index.scss';
 
 // app functions
 import {
+  getSystemInfos,
   getWebAppInfos,
   getEmployees,
-  inserEmployee,
+  insertEmployee,
   updateEmployeeLevel,
   deleteEmployee,
   addToasterNotification
@@ -99,6 +100,8 @@ document.addEventListener("DOMContentLoaded", async function() {
   // create input modal instance
   modal_instance.input = Modal.create(document.getElementById('input-modal'));
 
+
+
   // retrieve web app backend infos
   let resp_json = await getWebAppInfos()
   if(!resp_json.err) {
@@ -107,6 +110,54 @@ document.addEventListener("DOMContentLoaded", async function() {
     app_infos_obj.web_server_infos = { name: 'db2-samplejs', version: '?'}
   }
   document.getElementById('app_title').innerHTML = `${app_infos_obj.web_server_infos.name} ${app_infos_obj.web_server_infos.version}`
+  let appemployees_div_head_elem = document.getElementById('appemployees_div_head');
+  appemployees_div_head_elem.innerHTML = `<h2>${app_infos_obj.web_server_infos.name} application</h2>`
+  appemployees_div_head_elem.style.display = 'block'
+
+  let appemployees_div_infos1_elem = document.getElementById('appemployees_div_infos1');
+  let appemployees_div_infos2_elem = document.getElementById('appemployees_div_infos2');
+  let appemployees_div_infos3_elem = document.getElementById('appemployees_div_infos3');
+  appemployees_div_infos1_elem.classList.remove('app--error_msg')
+  appemployees_div_infos2_elem.classList.remove('app--error_msg')
+  appemployees_div_infos3_elem.classList.remove('app--error_msg')
+  appemployees_div_infos1_elem.innerHTML = `Some wab app infos here`
+  appemployees_div_infos2_elem.innerHTML = `Some system infos here`
+  appemployees_div_infos3_elem.innerHTML = `Some DB infos here`
+  appemployees_div_infos1_elem.style.display = 'block'
+  appemployees_div_infos2_elem.style.display = 'block'
+  appemployees_div_infos3_elem.style.display = 'block'
+// retrieve backend information
+  getSystemInfos(function(response){
+    if (!response.err) {
+      // set info1 infos (web app)
+      let appemployeesWebAppInfosTemplate = require("./templates/employees/employees_webapp_infos.handlebars")
+      appemployees_div_infos1_elem.innerHTML = appemployeesWebAppInfosTemplate({
+        web_app: response.web_app,
+      })
+      // set info2 infos (system)
+      let appemployeesSystemInfosTemplate = require("./templates/employees/employees_system_infos.handlebars")
+      appemployees_div_infos2_elem.innerHTML = appemployeesSystemInfosTemplate({
+        system: response.system,
+      })
+      // set info3 infos (db)
+      let appemployeesDBInfosTemplate = require("./templates/employees/employees_db_infos.handlebars")
+      appemployees_div_infos3_elem.innerHTML = appemployeesDBInfosTemplate({
+        db_infos: response.db_infos,
+      })
+    } else {
+      console.error('getSystemInfos error: ' + response.message);
+      appemployees_div_infos1_elem.innerHTML = `${response.message}`
+      appemployees_div_infos2_elem.innerHTML = `${response.message}`
+      appemployees_div_infos1_elem.classList.add('app--error_msg')
+      appemployees_div_infos2_elem.classList.add('app--error_msg')
+    }
+  },function(error){
+    console.error('getSystemInfos reject error: ' + error.message);
+    appemployees_div_infos1_elem.innerHTML = `${error.message}`
+    appemployees_div_infos2_elem.innerHTML = `${error.message}`
+    appemployees_div_infos1_elem.classList.add('app--error_msg')
+    appemployees_div_infos2_elem.classList.add('app--error_msg')
+  })
 
   // display list of employees (default page) 
   showEmployees()
@@ -114,21 +165,12 @@ document.addEventListener("DOMContentLoaded", async function() {
 
 // display employees page 
 export function showEmployees() {
-  // set app main content
-  let appcontentmainTemplate = require("./templates/employees/employees_main.handlebars");
-  appcontentmain_elem.innerHTML = appcontentmainTemplate()
   // final horizontal rule
   document.getElementById('appemployees_hrule').contrast = "low-contrast";
   document.getElementById('appemployees_hrule').weight = "thick";
 
-  let appemployees_div_head_elem = document.getElementById('appemployees_div_head');
-  let appemployees_div_infos1_elem = document.getElementById('appemployees_div_infos1');
-  let appemployees_div_infos2_elem = document.getElementById('appemployees_div_infos2');
   let appemployees_div_list_elem = document.getElementById('appemployees_div_list');
-  appemployees_div_head_elem.innerHTML = `<h2>${app_infos_obj.web_server_infos.name} application</h2>`
-  appemployees_div_infos1_elem.innerHTML = `Some platform infos here`
-  appemployees_div_infos2_elem.innerHTML = `Some web app infos here`
-  appemployees_div_list_elem.innerHTML = `<div id="employees_infos1_inlineloading" data-inline-loading class="bx--inline-loading" role="alert" aria-live="assertive">
+  appemployees_div_list_elem.innerHTML = `<div id="employees_inlineloading" data-inline-loading class="bx--inline-loading" role="alert" aria-live="assertive">
     <div class="bx--inline-loading__animation">
       <div data-inline-loading-spinner class="bx--loading bx--loading--small">
         <svg class="bx--loading__svg" viewBox="-75 -75 150 150">
@@ -144,12 +186,9 @@ export function showEmployees() {
     <p data-inline-loading-text-error hidden class="bx--inline-loading__text">Employees details loading failed!!</p>
   </div>
   `
-  appemployees_div_head_elem.style.display = 'block'
-  appemployees_div_infos1_elem.style.display = 'block'
-  appemployees_div_infos2_elem.style.display = 'block'
   appemployees_div_list_elem.classList.remove('app--error_msg')
   appemployees_div_list_elem.style.display = 'block'
-  let inlineloading_employeeselem = document.getElementById('employees_infos1_inlineloading')
+  let inlineloading_employeeselem = document.getElementById('employees_inlineloading')
   let inLineloadingInstanceEmployees = InlineLoading.create(inlineloading_employeeselem)
   inLineloadingInstanceEmployees.setState(InlineLoading.states.ACTIVE)
   // prepare refresh top and bottom button action
@@ -188,4 +227,100 @@ export function showEmployees() {
     //appemployees_refresh_top_btn_elem.disabled = false
     appemployees_refresh_btn_elem.disabled = false
   })
+}
+
+export function delete_employee(empno,fistname,lastname) {
+  // set modal title and subtitle
+  document.getElementById('danger-modal-xs-label').innerHTML = `Employee deletion`
+  document.getElementById('danger-modal-xs-heading').innerHTML = `Do you confirm to delete the employee: ${fistname} ${lastname} (${empno})?`
+  // Create the button action by fill in the footer innetHTML, this destroy any remaining event on the button
+  // set focus on cancel button
+  document.getElementById('danger-modal-xs-footer').innerHTML = `
+    <button class="bx--btn bx--btn--secondary dbm--cancel-btn" type="button" data-modal-close data-modal-primary-focus id="danger-modal-xs-btn-cancel">Cancel</button>
+    <button class="bx--btn bx--btn--danger dbm--danger-btn" type="button" aria-label="Danger" id="danger-modal-xs-btn-ok">Delete</button>
+  `
+  // cancel button event => no need to add an event, this is handled by data-modal-close
+  // create button event
+  document.getElementById('danger-modal-xs-btn-ok').addEventListener('click', () => {
+    // close modal
+    modal_instance.danger_xs.hide();
+    console.log(`Send request to delete employee: ${fistname} ${lastname} (${empno})`)
+    addToasterNotification('info', { title: `Employee ${empno} delete request in progress...`, subtitle: `${fistname} ${lastname}`}, 4)
+    // call api
+    deleteEmployee(empno, function(response){
+        if (!response.err) {
+          //console.log(response.message)
+          addToasterNotification('success', { title: `Employee ${empno} delete request done`, subtitle: ''}, 10)
+          // refresh employee list
+          showEmployees() 
+        } else {
+          addToasterNotification('error', { title: `Employee ${empno} delete request failed`, subtitle: 'employee not defined or permission is required'})
+          console.error('deleteEmployee error: ' + response.message);
+        }
+      },function(error){
+        addToasterNotification('error', { title: `Employee ${empno} delete request failed`, subtitle: 'DB error'})
+        console.error('deleteEmployee reject error: ' + error.message);
+      }
+    )
+  })
+  modal_instance.danger_xs.show();
+
+}
+
+// update employee level
+export function update_level(empno,fistname,lastname,current_level) {
+  // set modal title and subtitle
+  document.getElementById('input-modal-label').innerHTML = `Update employee level`
+  document.getElementById('input-modal-heading').innerHTML = `Select the new level for employee ${fistname} ${lastname} (${empno})`
+  let tmp_input_modal_content_elem = document.getElementById('input-modal-content')
+  
+  // generate form select fields (focus on level select field)
+  let employeeLeveUpdateFormTemplate = require("./templates/employees/employee_update_level_form.handlebars");
+  tmp_input_modal_content_elem.innerHTML = employeeLeveUpdateFormTemplate({
+    current_level: current_level, // current employee level
+    employee_levels: [ // levels list
+      '10','11','12','13','14','15','16','17','18','19','20'
+    ],  
+  })
+
+  // Create the button action by fill in the footer innetHTML, this destroy any remaining event on the button
+  document.getElementById('input-modal-footer').innerHTML = `
+    <button class="bx--btn bx--btn--secondary dbm--cancel-btn" type="button" data-modal-close id="input-modal-btn-cancel">Cancel</button>
+    <button class="bx--btn bx--btn--danger dbm--danger-btn" type="button" aria-label="Danger" id="input-modal-btn-ok">Update</button>
+  `
+  // cancel button event => no need to add an event, this is handled by data-modal-close
+  // create button event
+  document.getElementById('input-modal-btn-ok').addEventListener('click', () => {
+    // get selected values
+    // check server
+    let employee_level_elem = document.getElementById('employee_levels-input-modal')
+    if(employee_level_elem.value == current_level) {
+      // the server must be different than current level
+      document.getElementById('employee_levels-input-wrapper_modal').setAttribute('data-invalid', true)
+    } else {
+      // close modal
+      modal_instance.input.hide();
+      let input_level_obj = { empno: empno, new_level: employee_level_elem.value}
+      console.log(`Send request to update level for employee: ${fistname} ${lastname} (${empno})` )
+      addToasterNotification('info', { title: `Level update for employee ${fistname} ${lastname} (${empno}) request in progress...`, subtitle: `New level: ${employee_level_elem.value}`})
+      // call api
+      updateEmployeeLevel(input_level_obj, function(response){
+          if (!response.err) {
+            //console.log(response.message)
+            addToasterNotification('success', { title: `Employee ${empno} level update request done`, subtitle: ''}, 10)
+            // refresh employee list
+            showEmployees() 
+          } else {
+            addToasterNotification('error', { title: `Employee ${empno} level update request failed`, subtitle: 'employee not defined or permission is required'})
+            console.error('updateEmployeeLevel error: ' + response.message);
+          }
+        },function(error){
+          addToasterNotification('error', { title: `Employee ${empno} level update request failed`, subtitle: 'DB error'})
+          console.error('updateEmployeeLevel reject error: ' + error.message);
+        }
+      )
+    }
+  })
+  // open modal
+  modal_instance.input.show();
 }

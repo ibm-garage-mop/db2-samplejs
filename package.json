@@ -1,6 +1,6 @@
 {
   "name": "db2-samplejs",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Sample web application used to demo IBM DB2 connection",
   "engines": {
     "node": "14.16.0"

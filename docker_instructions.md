@@ -28,7 +28,7 @@ docker tag db2-samplejs:1.0 <dockerHub userId>/db2-samplejs:1.0
 docker push <dockerHub userId>/db2-samplejs:1.0
 ```
 
-Get the mage from docker hub:
+Get the image from docker hub:
 
 Add the docker user to authorisation list for this private docker repository:
 ```

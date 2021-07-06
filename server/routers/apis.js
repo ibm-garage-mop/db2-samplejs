@@ -1,12 +1,83 @@
 // dbm web app private routes
-//const util = require('util')
-const fs = require('fs')
+const util = require('util')
+//const fs = require('fs')
+const os = require('os')
+const exec = util.promisify(require('child_process').exec)
 const express = require('express')
 const httpStatus = require('http-status')
 const DataController = require('../controllers/data.controller')
 
-module.exports = function(app) {
+module.exports = function(app, appName, appVersion) {
   const router = express.Router()
+
+  // system infos
+  router.get('/api/system_infos', async function(req, res) {
+    
+    let result = {
+      err: null,
+      db_infos: {},
+      system: {
+        arch: os.arch(),
+        cpus: os.cpus(),
+        endianness: os.endianness(),
+        freemem: os.freemem(),
+        hostname: os.hostname(),
+        platform: os.platform(),
+        totalmem: os.totalmem(),
+        type: os.type(),
+        version: os.version(),
+        os_name: '?',
+        os_version: '?',
+        docker: false,
+      },
+      web_app: {
+        name: appName,
+        version: appVersion,
+        dirname: __dirname
+      }
+    }
+    // get nodejs version
+    try {
+      const { stdout, stderr } = await exec('node -v');
+      result.web_app.node_js = stderr&stderr!=''?'':stdout
+    } catch(e) {
+      result.web_app.node_js = '?'
+    }
+    // get system os name from cat /etc/os-release
+    try{
+      // get os Name 
+      const { stdout, stderr } = await exec("cat /etc/os-release | grep ^NAME=")
+      result.system.os_name = stderr&stderr!=''?'':stdout.split('=')[1]
+    } catch(e){
+      console.error(`Error trying to get os name`)
+    }
+    // get system os version from cat /etc/os-release
+    try{
+      // get os Version 
+      const { stdout, stderr } = await exec("cat /etc/os-release | grep ^VERSION=")
+      result.system.os_version = stderr&stderr!=''?'':stdout.split('=')[1]
+    } catch(e){
+      console.error(`Error trying to get os version`)
+    }
+    
+    // get docker info 
+    try{
+      const { stdout, stderr } = await exec("cat /proc/self/cgroup |grep /docker/$(hostname)")
+      result.system.docker = stderr&stderr!=''?false:stdout&stdout!=''?true:false
+    } catch(e){
+      result.system.docker = false  // assuming that if the file is not present then this is not a docker container... 
+    }
+    
+    // get DB infos
+    const dataCtl = new DataController()
+    let db_res = await dataCtl.getDB2Infos()
+    result.db_infos = db_res.db_infos
+    res
+    .status(httpStatus.OK)
+    .json(result)
+    .end()
+  })
+
 
   // EMPLOYEES
   router.get('/api/employees', async function(req, res) {

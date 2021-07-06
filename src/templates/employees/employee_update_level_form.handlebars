@@ -1,0 +1,24 @@
+<!--
+  Copyright IBM Corp. 2016, 2018
+
+  This source code is licensed under the Apache-2.0 license found in the
+  LICENSE file in the root directory of this source tree.
+-->
+<div style="display: grid; grid-template-columns: 30% 70%; grid-gap: 10px;">
+<div class="app--type-mono-scale_2">Current level: {{current_level}}</div>
+<div class="bx--form-item">
+  <div class="bx--select bx--select--light">
+    <label for="employee_levels-input-modal" class="bx--label">Levels (Mandatory)</label>
+    <div class="bx--select-input__wrapper" id="employee_levels-input-wrapper_modal">
+      <select id="employee_levels-input-modal" class="bx--select-input" data-modal-primary-focus>
+        <option class="bx--select-option" value="NA" selected>Select then new level</option>
+        {{#each employee_levels}}
+          <option class="bx--select-option" value="{{this}}">{{this}}</option>
+        {{/each}}
+      </select>
+      <svg focusable="false" preserveAspectRatio="xMidYMid meet" style="will-change: transform;" xmlns="http://www.w3.org/2000/svg" class="bx--select__arrow" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M5 6L0 1 0.7 0.3 5 4.6 9.3 0.3 10 1z"></path></svg>
+    </div>
+    <div class="bx--form-requirement">A level different than the current level must be selected</div>
+  </div>
+</div>
+</div>

@@ -16,11 +16,11 @@ LICENSE file in the root directory of this source tree.
       <dds-masthead-menu-button></dds-masthead-menu-button>
       <dds-masthead-logo></dds-masthead-logo>
       <dds-top-nav menu-bar-label="IBM [Platform]" aria-label="IBM [Platform]">
-        <dds-top-nav-item role="link" href="javascript:void(0);" onclick="javascript:AppLib.index.showEmployees();" title="Employees"></dds-top-nav-item>
+        <dds-top-nav-item role="link" href="index.html" title="Employees"></dds-top-nav-item>
       </dds-top-nav>
       <dds-left-nav-overlay></dds-left-nav-overlay>
       <dds-left-nav menu-bar-label="IBM [Platform]">
-        <dds-left-nav-item role="link" href="javascript:void(0);" onclick="javascript:AppLib.index.showEmployees();" title="Employees"></dds-left-nav-item>
+        <dds-left-nav-item role="link" href="index.html" title="Employees"></dds-left-nav-item>
       </dds-left-nav>
     </dds-masthead>
     <main>
@@ -29,8 +29,64 @@ LICENSE file in the root directory of this source tree.
           <div class="bx--col-sm-4 bx--col-md-8 bx--col-lg-16">
             <div class="outside">
               <div class="inside">
-                <div id="toast_messages" class="app_toast_messages"></div>
-                <div id="appcontent_main"><h1 style="color:teal">Please wait while the page is loading....</h1></div>
+                <div id="toast_messages" class="app--toast_messages"></div>
+                <!--div id="appcontent_error_messages" class="app--error_msg" style="display:none"></div-->
+                <div id="appcontent_main">
+                  <div class="bx--grid">
+                    <div class="bx--row">
+                        <div class="bx--col">
+                            <div style="display: none" id="appemployees_div_head"></div>
+                        </div>
+                    </div>
+                    <div class="bx--row bx--row-padding">
+                        <div class="bx--col-sm-4 bx--col-md-6 bx--col-lg-4">
+                            <div style="display: none; padding:2%" class="app--background-green10" id="appemployees_div_infos1"></div>
+                        </div>
+                        <div class="bx--col-sm-4 bx--col-md-6 bx--col-lg-6">
+                          <div style="display: none; padding:2%" class="app--background-blue20" id="appemployees_div_infos2"></div>
+                      </div>
+                      <div class="bx--col-sm-4 bx--col-md-6 bx--col-lg-6">
+                            <div style="display: none; padding:2%" class="app--background-warmgray10" id="appemployees_div_infos3"></div>
+                        </div>
+                    </div>
+                    <div class="bx--row bx--row-padding">
+                        <div class="bx--col">
+                            <dds-button-group style="margin-top: 2px;padding-bottom: 20px">
+                                <dds-button-group-item id="appemployees_refresh_top_btn">
+                                    Refresh Employees table
+                                    <svg slot="icon" focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true" width="20" height="20" viewBox="0 0 32 32">
+                                        <path d="M26,18A10,10,0,1,1,16,8h6.1821l-3.5844,3.5854L20,13l6-6L20,1,18.5977,2.414,22.1851,6H16A12,12,0,1,0,28,18Z"/>
+                                        <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" style="fill: none;" width="20" height="20"/>
+                                    </svg>
+                                </dds-button-group-item>
+                                <dds-button-group-item disabled id="appemployees_create_employee_top_btn">
+                                    Define a new employee
+                                    <svg slot="icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20">
+                                    <path d="M11.8 2.8L10.8 3.8 16.2 9.3 1 9.3 1 10.7 16.2 10.7 10.8 16.2 11.8 17.2 19 10z"></path>
+                                    </svg>
+                                </dds-button-group-item>
+                            </dds-button-group>
+                            <div style="display: none; padding:2; overflow: auto;" class="app--background-warmgray10" id="appemployees_div_list"></div>
+                            <dds-button-group>
+                                <dds-button-group-item disabled id="appemployees_refresh_btn">
+                                    Refresh Employees table
+                                    <svg slot="icon" focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true" width="20" height="20" viewBox="0 0 32 32">
+                                        <path d="M26,18A10,10,0,1,1,16,8h6.1821l-3.5844,3.5854L20,13l6-6L20,1,18.5977,2.414,22.1851,6H16A12,12,0,1,0,28,18Z"/>
+                                        <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" style="fill: none;" width="20" height="20"/>
+                                    </svg>
+                                </dds-button-group-item>
+                                <dds-button-group-item disabled id="appemployees_create_employee_btn">
+                                    Define a new employee
+                                    <svg slot="icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20">
+                                    <path d="M11.8 2.8L10.8 3.8 16.2 9.3 1 9.3 1 10.7 16.2 10.7 10.8 16.2 11.8 17.2 19 10z"></path>
+                                    </svg>
+                                </dds-button-group-item>
+                            </dds-button-group>
+                        </div>
+                    </div>
+                  </div>
+                  <dds-hr id="appemployees_hrule"></dds-hr>
+                </div>
               </div>
             </div>
           </div>

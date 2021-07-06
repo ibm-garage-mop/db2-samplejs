@@ -207,6 +207,9 @@ svg[fill='red'] path {
 .app--text-red50 {
   color: $red-50;
 }
+.app--text-red80 {
+  color: $red-80;
+}
 .app--text-blue60 {
   color: $blue-60;
 }
@@ -265,6 +268,7 @@ svg[fill='red'] path {
   position: -webkit-sticky;
   position: sticky;
   top: 0px;
+  z-index: 1;
 }
 
 [data-notification] {

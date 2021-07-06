@@ -3,5 +3,5 @@ module.exports = function(app, appName, appVersion){
     require('./html')(app)
     require('./health')(app, appName, appVersion)
     // api routes
-    require('./apis')(app)
+    require('./apis')(app, appName, appVersion)
 }

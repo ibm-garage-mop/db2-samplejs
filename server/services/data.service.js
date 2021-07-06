@@ -19,6 +19,41 @@ class DataService {
   // DB2 ()
   /////////////////////////////////////////////////////////////
 
+  // this method is used to retrieve databse informations
+  async getDB2Infos() {
+    // open db2 connection
+    let db2conn
+    try {
+      log.trace(`[db2.service.getDB2Infos] try to connect to db2...`)
+      db2conn = await ibmdb.open(db2ConnStr)
+    } catch(err) {
+      console.error('[db2.service.getDB2Infos] ', JSON.stringify(err))
+      return { err: 'DB_ERROR', message: 'Cannot connect to the Database!!!' }         
+    }
+    try {
+      let db_data = {}
+      db_data.sql_dbms_functionlvl =  db2conn.getInfoSync(ibmdb.SQL_DBMS_FUNCTIONLVL)
+      db_data.sql_dbms_name =  db2conn.getInfoSync(ibmdb.SQL_DBMS_NAME)
+      db_data.sql_dbms_ver =  db2conn.getInfoSync(ibmdb.SQL_DBMS_VER)
+      db_data.sql_driver_bldlevel =  db2conn.getInfoSync(ibmdb.SQL_DRIVER_BLDLEVEL)
+      db_data.sql_driver_name =  db2conn.getInfoSync(ibmdb.SQL_DRIVER_NAME)
+      db_data.sql_driver_ver =  db2conn.getInfoSync(ibmdb.SQL_DRIVER_VER)
+      db_data.sql_odbc_ver =  db2conn.getInfoSync(ibmdb.SQL_ODBC_VER)
+      db_data.sql_server_name =  db2conn.getInfoSync(ibmdb.SQL_SERVER_NAME)
+      db2conn.closeSync();
+      log.trace(`[db2.service.getDB2Infos] db2 connection closed`)
+      let resp_json={ err: null }
+      resp_json.response = db_data
+      return resp_json
+    } catch(err) {
+      db2conn.closeSync();
+      console.error('[db2.service.getDB2Infos] ', JSON.stringify(err))
+      return { err: 'DB_ERROR', message: 'Error querying database infos' }         
+    }
+  }
+
+
+
   // EMPLOYEE TABLE
   /*
   $ db2 describe table DB2INST1.EMPLOYEE
