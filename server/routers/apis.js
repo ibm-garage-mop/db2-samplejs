@@ -29,6 +29,7 @@ module.exports = function(app, appName, appVersion) {
         os_name: '?',
         os_version: '?',
         docker: false,
+        kubepods: false,
       },
       web_app: {
         name: appName,
@@ -62,10 +63,19 @@ module.exports = function(app, appName, appVersion) {
     
     // get docker info 
     try{
-      const { stdout, stderr } = await exec("cat /proc/self/cgroup |grep /docker/$(hostname)")
+      const { stdout, stderr } = await exec("cat /proc/self/cgroup |grep /docker")
+      result.system.docker_self_cgroup = stderr&stderr!=''?'':stdout
       result.system.docker = stderr&stderr!=''?false:stdout&stdout!=''?true:false
     } catch(e){
-      result.system.docker = false  // assuming that if the file is not present then this is not a docker container... 
+      result.system.docker_self_cgroup = ''  // assuming that if the file is not present then this is not a docker container... 
+    }
+    // get kubernetes infos
+    try{
+      const { stdout, stderr } = await exec("cat /proc/self/cgroup |grep /kubepods")
+      result.system.kubepods_cgroup = stderr&stderr!=''?'':stdout
+      result.system.kubepods = stderr&stderr!=''?false:stdout&stdout!=''?true:false
+    } catch(e){
+      result.system.kubepods_cgroup = ''  // assuming that if the file is not present then this is not a docker container... 
     }
     
     // get DB infos
