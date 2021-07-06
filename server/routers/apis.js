@@ -72,10 +72,10 @@ module.exports = function(app, appName, appVersion) {
     // get kubernetes infos
     try{
       const { stdout, stderr } = await exec("cat /proc/self/cgroup |grep /kubepods")
-      result.system.kubepods_cgroup = stderr&stderr!=''?'':stdout
+      result.system.kubepods_self_cgroup = stderr&stderr!=''?'':stdout
       result.system.kubepods = stderr&stderr!=''?false:stdout&stdout!=''?true:false
     } catch(e){
-      result.system.kubepods_cgroup = ''  // assuming that if the file is not present then this is not a docker container... 
+      result.system.kubepods_self_cgroup = ''  // assuming that if the file is not present then this is not a docker container... 
     }
     
     // get DB infos

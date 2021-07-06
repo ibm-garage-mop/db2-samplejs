@@ -135,6 +135,11 @@ document.addEventListener("DOMContentLoaded", async function() {
         web_app: response.web_app,
       })
       // set info2 infos (system)
+      // some debug here TODO remove it
+      console.debug(response.system.kubepods)
+      if(response.system.kubepods_self_cgroup!='' && !response.system.kubepods) {
+        response.system.kubepods = true
+      }
       let appemployeesSystemInfosTemplate = require("./templates/employees/employees_system_infos.handlebars")
       appemployees_div_infos2_elem.innerHTML = appemployeesSystemInfosTemplate({
         system: response.system,
