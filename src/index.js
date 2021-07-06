@@ -297,9 +297,8 @@ export function update_level(empno,fistname,lastname,current_level) {
   // create button event
   document.getElementById('input-modal-btn-ok').addEventListener('click', () => {
     // get selected values
-    // check server
     let employee_level_elem = document.getElementById('employee_levels-input-modal')
-    if(employee_level_elem.value == current_level) {
+    if(employee_level_elem.value == 'NA' || employee_level_elem.value == current_level) {
       // the server must be different than current level
       document.getElementById('employee_levels-input-wrapper_modal').setAttribute('data-invalid', true)
     } else {

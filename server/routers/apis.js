@@ -65,7 +65,9 @@ module.exports = function(app, appName, appVersion) {
     try{
       const { stdout, stderr } = await exec("cat /proc/self/cgroup |grep /docker")
       result.system.docker_self_cgroup = stderr&stderr!=''?'':stdout
-      result.system.docker = stderr&stderr!=''?false:stdout&stdout!=''?true:false
+      if(result.system.docker_self_cgroup!='') {
+        result.system.docker = true
+      }
     } catch(e){
       result.system.docker_self_cgroup = ''  // assuming that if the file is not present then this is not a docker container... 
     }
@@ -73,7 +75,9 @@ module.exports = function(app, appName, appVersion) {
     try{
       const { stdout, stderr } = await exec("cat /proc/self/cgroup |grep /kubepods")
       result.system.kubepods_self_cgroup = stderr&stderr!=''?'':stdout
-      result.system.kubepods = stderr&stderr!=''?false:stdout&stdout!=''?true:false
+      if(result.system.kubepods_self_cgroup!='') {
+        result.system.kubepods = true
+      }
     } catch(e){
       result.system.kubepods_self_cgroup = ''  // assuming that if the file is not present then this is not a docker container... 
     }
