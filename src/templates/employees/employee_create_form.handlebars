@@ -1,0 +1,76 @@
+<!--
+  Copyright IBM Corp. 2016, 2018
+
+  This source code is licensed under the Apache-2.0 license found in the
+  LICENSE file in the root directory of this source tree.
+-->
+<div style="display: grid; grid-template-columns: 50% 50%; grid-gap: 10px;">
+  <div class="bx--form-item">
+    <label for="employee_empno_input" class="bx--label">Employee number (Mandatory)</label>
+    <input id="employee_empno_input" type="text" class="bx--text-input bx--text-input--light" placeholder="000011">
+    <div class="bx--form-requirement">
+      Invalid employee nb
+    </div>
+    <div class="bx--form__helper-text">
+      The employee number is unique for each employee. Check that the entered value is not already used</code>
+    </div>
+  </div>
+  <div class="bx--form-item">
+    <div data-numberinput name="employee_salary_input" class="bx--number bx--number--light bx--number--helpertext">
+      <label for="employee_salary_input" class="bx--label">Annual Salary (Mandatory)</label>
+      <div class="bx--number__input-wrapper">
+        <input id="employee_salary_input" type="number" min="15000"  placeholder="15000">
+      </div>
+      <div class="bx--form-requirement">
+        Invalid number
+      </div>
+      <div class="bx--form__helper-text">
+        Enter a numeric value (min 15000)
+      </div>
+    </div>
+  </div>
+  <div class="bx--form-item">
+    <label for="employee_firstname_input" class="bx--label">First name (Mandatory)</label>
+    <input id="employee_firstname_input" type="text" class="bx--text-input bx--text-input--light" placeholder="first name">
+    <div class="bx--form-requirement">
+      Invalid first name
+    </div>
+  </div>
+  <div class="bx--form-item">
+    <label for="employee_lastname_input" class="bx--label">Last name (Mandatory)</label>
+    <input id="employee_lastname_input" type="text" class="bx--text-input bx--text-input--light" placeholder="last name">
+    <div class="bx--form-requirement">
+      Invalid last name
+    </div>
+  </div>
+  <div class="bx--form-item">
+    <div class="bx--select bx--select--light">
+      <label for="employee_department_input" class="bx--label">Department (Mandatory)</label>
+      <div class="bx--select-input__wrapper" id="employee_department_input_wrapper">
+        <select id="employee_department_input" class="bx--select-input">
+          <option class="bx--select-option" value="NA" selected>Select the department</option>
+          {{#each departments}}
+            <option class="bx--select-option" value="{{this.DEPTNO}}">{{this.DEPTNAME}} ({{this.DEPTNO}})</option>
+          {{/each}}
+        </select>
+        <svg focusable="false" preserveAspectRatio="xMidYMid meet" style="will-change: transform;" xmlns="http://www.w3.org/2000/svg" class="bx--select__arrow" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M5 6L0 1 0.7 0.3 5 4.6 9.3 0.3 10 1z"></path></svg>
+      </div>
+      <div class="bx--form-requirement">A department must be selected</div>
+    </div>
+  </div>
+  <div class="bx--form-item">
+    <div class="bx--select bx--select--light">
+      <label for="employee_level_input" class="bx--label">Level (Mandatory)</label>
+      <div class="bx--select-input__wrapper" id="employee_level_input_wrapper">
+        <select id="employee_level_input" class="bx--select-input" data-modal-primary-focus>
+          <option class="bx--select-option" value="NA" selected>Select then employee level</option>
+          {{#each levels}}
+            <option class="bx--select-option" value="{{this}}">{{this}}</option>
+          {{/each}}
+        </select>
+        <svg focusable="false" preserveAspectRatio="xMidYMid meet" style="will-change: transform;" xmlns="http://www.w3.org/2000/svg" class="bx--select__arrow" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M5 6L0 1 0.7 0.3 5 4.6 9.3 0.3 10 1z"></path></svg>
+      </div>
+      <div class="bx--form-requirement">A level must be selected</div>
+    </div>
+  </div>
+</div>

@@ -155,6 +155,10 @@ svg[fill='red'] path {
   font-size: carbon--type-scale(3);
   font-family: carbon--font-family('mono');
 }
+.app--type-mono-scale_4 {
+  font-size: carbon--type-scale(4);
+  font-family: carbon--font-family('mono');
+}
 .app--type-mono-scale_5 {
   font-size: carbon--type-scale(5);
   font-family: carbon--font-family('mono');
@@ -171,6 +175,9 @@ svg[fill='red'] path {
 }
 .app--type-scale_3 {
   font-size: carbon--type-scale(3);
+}
+.app--type-scale_4 {
+  font-size: carbon--type-scale(4);
 }
 .app--type-scale_5 {
   font-size: carbon--type-scale(5);
@@ -257,6 +264,15 @@ svg[fill='red'] path {
 
 .app--productive-heading-01 {
   @include carbon--type-style('productive-heading-01', true)
+}
+.app--productive-heading-02 {
+  @include carbon--type-style('productive-heading-02', true)
+}
+.app--productive-heading-03 {
+  @include carbon--type-style('productive-heading-03', true)
+}
+.app--productive-heading-04 {
+  @include carbon--type-style('productive-heading-04', true)
 }
 
 .app--toast_messages {

@@ -12,7 +12,6 @@ module.exports = function(app, appName, appVersion) {
 
   // system infos
   router.get('/api/system_infos', async function(req, res) {
-    
     let result = {
       err: null,
       db_infos: {},
@@ -92,6 +91,19 @@ module.exports = function(app, appName, appVersion) {
     .end()
   })
 
+  // DEPARTMENTS
+  router.get('/api/departments', async function(req, res) {
+    const dataCtl = new DataController()
+    let result = await dataCtl.getDepartments()
+    if(result.err) {
+      res.status(httpStatus.BAD_REQUEST).json(result).end()
+    } else {
+      res
+      .status(httpStatus.OK)
+      .json(result)
+      .end()
+    }
+  })
 
   // EMPLOYEES
   router.get('/api/employees', async function(req, res) {

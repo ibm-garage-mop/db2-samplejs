@@ -237,6 +237,100 @@ async function getTestSystemInfos(resolve,reject) {
 })
 }
 
+// request departments api
+async function getDepartments(resolve,reject) {
+  if (window.fetch) {
+    fetch('/api/departments').then(function(response) {
+      if(response.ok) {
+        response.json().then(function(myJson) {
+          if (!myJson.err) {
+            resolve(myJson)
+          } else {
+            console.error('API error: ' + myJson.message);
+            reject({err: true, message: myJson.message})
+          }
+        });
+      } else {
+        console.error('response error: ' + response.ok);
+        reject({err: true, message: 'Error retrieving departments API response'})
+      }
+    })
+    .catch(function(error) {
+      console.error('Error with fetch operation: ' + error);
+      reject({err: true, message: 'unknownerror'})
+    });
+  } else {
+    console.error('fetch not supported');
+    reject({err: true, message: 'fetch not supported'})
+  }
+}
+
+
+// request system info api
+async function getTestDepartments(resolve,reject) {
+  resolve(
+{
+  "err": null,
+  "departments": [
+    {
+      "DEPTNO": "D21",
+      "DEPTNAME": "ADMINISTRATION SYSTEMS"
+    },
+    {
+      "DEPTNO": "F22",
+      "DEPTNAME": "BRANCH OFFICE F2"
+    },
+    {
+      "DEPTNO": "G22",
+      "DEPTNAME": "BRANCH OFFICE G2"
+    },
+    {
+      "DEPTNO": "H22",
+      "DEPTNAME": "BRANCH OFFICE H2"
+    },
+    {
+      "DEPTNO": "I22",
+      "DEPTNAME": "BRANCH OFFICE I2"
+    },
+    {
+      "DEPTNO": "J22",
+      "DEPTNAME": "BRANCH OFFICE J2"
+    },
+    {
+      "DEPTNO": "D01",
+      "DEPTNAME": "DEVELOPMENT CENTER"
+    },
+    {
+      "DEPTNO": "C01",
+      "DEPTNAME": "INFORMATION CENTER"
+    },
+    {
+      "DEPTNO": "D11",
+      "DEPTNAME": "MANUFACTURING SYSTEMS"
+    },
+    {
+      "DEPTNO": "E11",
+      "DEPTNAME": "OPERATIONS"
+    },
+    {
+      "DEPTNO": "B01",
+      "DEPTNAME": "PLANNING"
+    },
+    {
+      "DEPTNO": "E21",
+      "DEPTNAME": "SOFTWARE SUPPORT"
+    },
+    {
+      "DEPTNO": "A00",
+      "DEPTNAME": "SPIFFY COMPUTER SERVICE DIV."
+    },
+    {
+      "DEPTNO": "E01",
+      "DEPTNAME": "SUPPORT SERVICES"
+    }
+  ]
+})
+}
 
 // request employees api
 async function getEmployees(resolve,reject) {
@@ -566,4 +660,4 @@ function addToasterNotification(notif_type, notif_obj, duration=8) {
   })
 }
 
-export {getSystemInfos, getWebAppInfos, getEmployees, insertEmployee, updateEmployeeLevel, deleteEmployee, addToasterNotification}
+export {getSystemInfos, getWebAppInfos, getDepartments, getEmployees, insertEmployee, updateEmployeeLevel, deleteEmployee, addToasterNotification}

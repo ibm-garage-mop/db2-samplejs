@@ -63,6 +63,7 @@ import './index.scss';
 import {
   getSystemInfos,
   getWebAppInfos,
+  getDepartments,
   getEmployees,
   insertEmployee,
   updateEmployeeLevel,
@@ -71,7 +72,7 @@ import {
 } from './app_funcs'
 // app constants for html dom manipulation
 // main div
-const appcontentmain_elem = document.getElementById('appcontent_main');
+//const appcontentmain_elem = document.getElementById('appcontent_main');
 // modal instance
 const modal_instance = {}
 // global app backend infos
@@ -135,11 +136,14 @@ document.addEventListener("DOMContentLoaded", async function() {
         web_app: response.web_app,
       })
       // set info2 infos (system)
-      // some debug here TODO remove it
-      console.debug(response.system.kubepods)
+      /*
       if(response.system.kubepods_self_cgroup!='' && !response.system.kubepods) {
         response.system.kubepods = true
       }
+      if(response.system.docker_self_cgroup!='' && !response.system.docker) {
+        response.system.docker = true
+      }
+      */
       let appemployeesSystemInfosTemplate = require("./templates/employees/employees_system_infos.handlebars")
       appemployees_div_infos2_elem.innerHTML = appemployeesSystemInfosTemplate({
         system: response.system,
@@ -205,6 +209,8 @@ export function showEmployees() {
   appemployees_refresh_btn_elem.addEventListener('click', () => {
     showEmployees()
   })
+  let appemployees_create_employee_top_btn_elem = document.getElementById('appemployees_create_employee_top_btn')
+  appemployees_create_employee_top_btn_elem.disabled = true
 
   // Retrieve employees from DB
   getEmployees(function(response){
@@ -215,6 +221,11 @@ export function showEmployees() {
       appemployees_div_list_elem.innerHTML = employeesListTemplate({
         employees: response.employees,
       })
+      // show insert button
+      appemployees_create_employee_top_btn_elem.addEventListener('click', () => {
+        insert_employee()
+      })
+      appemployees_create_employee_top_btn_elem.disabled = false
     } else {
       console.error('getEmployees error: ' + response.message);
       inLineloadingInstanceEmployees.setState(InlineLoading.states.ERROR)
@@ -222,14 +233,14 @@ export function showEmployees() {
       appemployees_div_list_elem.classList.add('app--error_msg')
     }
     // enable refresh top and bottom button
-    //appemployees_refresh_top_btn_elem.disabled = false
+    appemployees_refresh_top_btn_elem.disabled = false
     appemployees_refresh_btn_elem.disabled = false
   },function(error){
     console.error('getEmployees reject error: ' + error.message);
     inLineloadingInstanceEmployees.setState(InlineLoading.states.ERROR)
     appemployees_div_list_elem.innerHTML = 'ERROR No employees retrieved from DB...'
     // enable refresh top and bottom button
-    //appemployees_refresh_top_btn_elem.disabled = false
+    appemployees_refresh_top_btn_elem.disabled = false
     appemployees_refresh_btn_elem.disabled = false
   })
 }
@@ -328,3 +339,134 @@ export function update_level(empno,fistname,lastname,current_level) {
   // open modal
   modal_instance.input.show();
 }
+
+// insert new employee
+export function insert_employee() {
+  // set modal title and subtitle
+  document.getElementById('input-modal-label').innerHTML = `Create new employee`
+  document.getElementById('input-modal-heading').innerHTML = `Fill in the mandatory fields and click the Create button`
+  let tmp_input_modal_content_elem = document.getElementById('input-modal-content')
+  
+  // get departments list
+  getDepartments(function(response){
+    if (!response.err) {
+      // generate form input fields (focus on level select field)
+      let employeeCreateFormTemplate = require("./templates/employees/employee_create_form.handlebars");
+      tmp_input_modal_content_elem.innerHTML = employeeCreateFormTemplate({
+        departments: response.departments, // department list from DB
+        levels: [ // edlevels list
+          '10','11','12','13','14','15','16','17','18','19','20'
+        ],  
+      })
+
+      // Create the button action by fill in the footer innetHTML, this destroy any remaining event on the button
+      document.getElementById('input-modal-footer').innerHTML = `
+        <button class="bx--btn bx--btn--secondary app--cancel-btn" type="button" data-modal-close id="input-modal-btn-cancel">Cancel</button>
+        <button class="bx--btn bx--btn--danger app--danger-btn" type="button" aria-label="Danger" id="input-modal-btn-ok">Create</button>
+      `
+      // cancel button event => no need to add an event, this is handled by data-modal-close
+      // create button event
+      document.getElementById('input-modal-btn-ok').addEventListener('click', () => {
+        // get and verify input values
+        let input_employee_obj = {
+          empno: '1234',
+          firstnme: 'John',
+          lastname: 'Doe',
+          department: null,
+          edlevel: 10,
+          salary: 100,
+        }
+        let input_verif_ok = true
+        let tmp_elem = document.getElementById('employee_level_input')
+        if(tmp_elem.value == 'NA') {
+          document.getElementById('employee_level_input_wrapper').setAttribute('data-invalid', true)
+          input_verif_ok = false
+        } else {
+          document.getElementById('employee_level_input_wrapper').removeAttribute('data-invalid')
+          input_employee_obj.edlevel = tmp_elem.value * 1
+        }
+        tmp_elem = document.getElementById('employee_department_input')
+        if(tmp_elem.value == 'NA') {
+          document.getElementById('employee_department_input_wrapper').setAttribute('data-invalid', true)
+          input_verif_ok = false
+        } else {
+          document.getElementById('employee_department_input_wrapper').removeAttribute('data-invalid')
+          input_employee_obj.department = tmp_elem.value
+        }
+        tmp_elem = document.getElementById('employee_empno_input')
+        if(tmp_elem.value == '') {
+          tmp_elem.setAttribute('data-invalid', true)
+          input_verif_ok = false
+        } else {
+          tmp_elem.removeAttribute('data-invalid')
+          input_employee_obj.empno = tmp_elem.value
+        }
+        tmp_elem = document.getElementById('employee_firstname_input')
+        if(tmp_elem.value == '') {
+          tmp_elem.setAttribute('data-invalid', true)
+          input_verif_ok = false
+        } else {
+          tmp_elem.removeAttribute('data-invalid')
+          input_employee_obj.firstnme = tmp_elem.value
+        }
+        tmp_elem = document.getElementById('employee_lastname_input')
+        if(tmp_elem.value == '') {
+          tmp_elem.setAttribute('data-invalid', true)
+          input_verif_ok = false
+        } else {
+          tmp_elem.removeAttribute('data-invalid')
+          input_employee_obj.lastname = tmp_elem.value
+        }
+        tmp_elem = document.getElementById('employee_salary_input')
+        if(!tmp_elem.value || tmp_elem.value == '' || tmp_elem.value < 15000) {
+          document.getElementsByName('employee_salary_input')[0].setAttribute('data-invalid', true)
+          input_verif_ok = false
+        } else {
+          document.getElementsByName('employee_salary_input')[0].removeAttribute('data-invalid')
+          input_employee_obj.salary = tmp_elem.value * 1
+        }
+
+        if(input_verif_ok) {
+          // close modal
+          modal_instance.input.hide();
+          /*
+          {
+            empno: '1376',
+            firstnme: 'Benoit',
+            lastname: 'Clerget',
+            department: 'A00',
+            edlevel: 3,
+            salary: 42000
+          }
+          */
+          console.log(`Send request to create new employee: ${input_employee_obj.firstnme} ${input_employee_obj.lastname} (${input_employee_obj.empno})`)
+          addToasterNotification('info', { title: `Employee ${input_employee_obj.firstnme} ${input_employee_obj.lastname} (${input_employee_obj.empno}) creation request in progress...`, subtitle: ``})
+          // call api
+          insertEmployee(input_employee_obj, function(response){
+              if (!response.err) {
+                addToasterNotification('success', { title: `Employee ${input_employee_obj.empno} level update request done`, subtitle: ''}, 10)
+                // refresh employee list
+                showEmployees() 
+              } else {
+                addToasterNotification('error', { title: `Employee ${input_employee_obj.empno} creation request failed`, subtitle: 'empno already exists or permission is required'})
+                console.error('insertEmployee error: ' + response.message);
+              }
+            },function(error){
+              addToasterNotification('error', { title: `Employee ${input_employee_obj.empno} creation request failed`, subtitle: 'DB error'})
+              console.error('insertEmployee reject error: ' + error.message);
+            }
+          )
+        }
+      })
+      // open modal
+      modal_instance.input.show();
+    } else {
+      console.error('getDepartments error: ' + response.message);
+      dbmproject_div_users_elem.innerHTML = 'ERROR No departments infos retrieved from DB...'
+    }
+    },function(error){  
+    console.error('getDepartments reject error: ' + error.message);
+    dbmproject_div_users_elem.innerHTML = 'ERROR No departments infos retrieved from DB...'
+  })
+}
+

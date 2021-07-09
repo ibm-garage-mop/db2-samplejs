@@ -26,6 +26,22 @@ class DataCtl {
     }
   
     /**
+     * getDepartments
+     * 
+    */
+     async getDepartments() {
+      log.trace(`[db2Ctl.getDepartments] started...`)
+      try {
+        const result = await this.service.getDepartments()
+        log.trace(`[db2Ctl.getDepartments] completed`)
+        return { err: null, departments: result.response }
+      } catch (e) {
+        log.error(`Error : ${e.name} ${e.message}`)
+        return { err: (e.name?e.name:`unknown`), message: (e.message?e.message:`unknown`) }
+      }
+    }
+
+    /**
      * getEmployees
      * 
     */

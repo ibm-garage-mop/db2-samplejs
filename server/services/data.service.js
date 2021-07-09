@@ -52,6 +52,36 @@ class DataService {
     }
   }
 
+  // this method is used to retrieve the unique list of departments
+  async getDepartments() {
+    // open db2 connection
+    let db2conn
+    try {
+      log.trace(`[db2.service.getDepartments] try to connect to db2...`)
+      db2conn = await ibmdb.open(db2ConnStr)
+    } catch(err) {
+      console.error('[db2.service.getDepartments] ', JSON.stringify(err))
+      return { err: 'DB_ERROR', message: 'Cannot connect to the Database!!!' }         
+    }
+    try {
+      let sql_query = `select deptno,deptname from db2inst1.department order by deptname`
+      let data = await db2conn.query(sql_query)
+      db2conn.closeSync();
+      log.trace(`[db2.service.getDepartments] db2 connection closed`)
+      let resp_json={ err: null }
+      resp_json.response = []
+      if(data.length>0){
+        resp_json.response = data
+      }
+      return resp_json
+    } catch(err) {
+      db2conn.closeSync();
+      console.error('[db2.service.getDepartments] ', JSON.stringify(err))
+      return { err: 'DB_ERROR', message: 'Error querying departments data' }         
+    }
+  }
+
+
 
 
   // EMPLOYEE TABLE
@@ -113,11 +143,6 @@ COMM                            SYSIBM    DECIMAL                      9     2 Y
   // this method is used to insert a new employee record in EMPLOYEE table
   async insertEmployee(employee_def) {
     //console.log(employee_def)
-    // TODO check each part of the employee_def json object
-    // if checkl_employee_def(employee_def) {}
-    // else {  
-    //   return { err: 'DB_ERROR', message: 'Invalid input fields' }
-    // }
     /*
     {
       empno: '1376',
